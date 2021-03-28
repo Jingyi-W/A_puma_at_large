@@ -10,6 +10,27 @@ const findPaginatedArtworks = (page, limit) => fetch(`${AICA_BASE_URL}?page=${pa
 
 const findArtworkImageByImageId = (imageId) => fetch(`${IIIF_IMAGE_BASE_URL}/${imageId}/${IIIF_IMAGE_SUFFIX}`).then(response => response.json())
 
+const findCompleteArtworks = (artworksInfo) => {
+
+  let completeInfo = []
+  for (let i = 0; i < artworksInfo.length; i++) {
+    let _id = artworksInfo[i].id
+    findArtworkById(_id).then(actualArtwork => {
+      completeInfo.push(actualArtwork.data)
+      console.log(completeInfo.length)
+    })
+  }
+  let promise = new Promise((resolve, reject) => {
+    // We call resolve(...) when what we were doing asynchronously was successful, and reject(...) when it failed.
+    // In this example, we use setTimeout(...) to simulate async code.
+    // In reality, you will probably be using something like XHR or an HTML5 API.
+    setTimeout( function() {
+      resolve(completeInfo)  // Yay! Everything went well!
+    }, 250)
+  })
+  return promise
+}
+
 export default {
-  findArtworkById, findArtworksByKeyword, findPaginatedArtworks, findArtworkImageByImageId
+  findArtworkById, findArtworksByKeyword, findPaginatedArtworks, findArtworkImageByImageId, findCompleteArtworks
 }

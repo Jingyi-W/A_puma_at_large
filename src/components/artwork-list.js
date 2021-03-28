@@ -28,7 +28,7 @@ const ArtworkList = ({artworks=[],completeArtworks, findArtworksWithKeyword, fin
           </h2>
         </div>
         <div className={"row mt-4"}>
-          {artworks.map((artwork) => {
+          {completeArtworks.map((artwork) => {
             // findArtworkById(artwork.id).then(acturalArtwork => {setCompleteArtworkInfo(acturalArtwork) })
             // findArtworkById(artwork.id)
             // return <ArtworkCard artworkId={theArtwork.id}
@@ -70,23 +70,13 @@ const dtpm = (dispatch) => ({
     })
   },
   findCompleteArtworksWithKeyword: (artworksInfo) => {
-    // const completeInfo = artworksInfo.map(artwork => {
-    //   return artworkService.findArtworkById(artwork.id).then(completeInfo => {
-    //     return completeInfo
-    //   })
-    // })
-    let completeInfo = []
-    for (let i = 0; i < artworksInfo.length; i++) {
-      let _id = artworksInfo[i].id
-      artworkService.findArtworkById(_id).then(actualArtwork => {
-        completeInfo.push(actualArtwork.data)
-        console.log(completeInfo.length)
+    const completeArtworks = artworkService.findCompleteArtworks(artworksInfo).then(completeArtworks => {
+      dispatch({
+        type:"FIND_COMPLETE_ARTWORKS_BY_KEYWORD",
+        artworksWithKeywordComplete: completeArtworks
       })
-    }
-    dispatch({
-      type:"FIND_COMPLETE_ARTWORKS_BY_KEYWORD",
-      artworksWithKeywordComplete: completeInfo
     })
+
   },
   findArtworkById: (artworkId) => {
     artworkService.findArtworkById(artworkId).then(artwork => dispatch({
