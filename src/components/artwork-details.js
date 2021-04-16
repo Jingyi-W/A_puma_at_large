@@ -2,17 +2,17 @@ import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {connect} from "react-redux";
 import artworkService from "../services/artwork-service";
+import reviewService from "../services/review-service";
 
-const ArtworkDetails = ({theArtwork, findArtworkById}) => {
+const ArtworkDetails = ({theArtwork, findArtworkById, reviews, findReviewsForArtwork}) => {
   const {artworkId} = useParams();
 
 
   useEffect(() => {
     if (artworkId !== undefined && typeof artworkId !== undefined) {
       findArtworkById(artworkId)
-      console.log("theArtwork:" + theArtwork)
+      findReviewsForArtwork(artworkId)
     }
-    console.log("theArtwork:" + theArtwork)
   },[artworkId])
 
 
@@ -55,12 +55,27 @@ const ArtworkDetails = ({theArtwork, findArtworkById}) => {
           {theArtwork.credit_line}
         </div>
 
+        <div>
+          Reviews:
+          <br/>
+          <ul>
+            <li>{reviews.map(review => review.comment)}</li>
+          </ul>
+        </div>
+
+        {/*<div>*/}
+        {/*  Add your review:*/}
+        {/*  <br/>*/}
+        {/*  */}
+        {/*</div>*/}
+
       </div>
   )
 }
 
 const stpm = (state) => ({
-  theArtwork: state.artworkReducer.theArtwork
+  theArtwork: state.artworkReducer.theArtwork,
+  reviews: state.reveiwReducer.reviews
 })
 
 const dtpm = (dispatch) => ({
@@ -68,6 +83,12 @@ const dtpm = (dispatch) => ({
     artworkService.findArtworkById(artworkId).then(theArtwork => dispatch({
       type: "FIND_ARTWORK_BY_ID",
       theArtwork: theArtwork.data
+    }))
+  },
+  findReviewsForArtwork: (artworkId) => {
+    reviewService.findReviewsForArtwork(artworkId).then(reviews => dispatch({
+      type: "FIND_REVIEWS_FOR_ARTWORK",
+      reviews: reviews
     }))
   }
 })

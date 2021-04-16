@@ -8,10 +8,11 @@ import {combineReducers, createStore} from "redux";
 import {Provider} from "react-redux";
 import artworkReducer from "./reducers/artwork-reducer";
 import ArtworkList from "./components/artwork-list";
+import reviewReducer from "./reducers/review-reducer";
 
 
 
-const reducer = combineReducers({artworkReducer: artworkReducer})
+const reducer = combineReducers({artworkReducer: artworkReducer, reviewReducer: reviewReducer})
 
 const store = createStore(reducer)
 
